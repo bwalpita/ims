@@ -1301,8 +1301,8 @@ class Admin extends CI_Controller {
             $user_id = $this->input->post('user_id');
             $course_id = $this->input->post('course_id');
             $course_payment = $this->input->post('course_payment');
-            $this->crud_model->course_manual_payment($user_id, "manual", $course_id, $course_payment);
-
+            $payment_id = $this->crud_model->course_manual_payment($user_id, "manual", $course_id, $course_payment);
+            $page_data['payment_id'] = $payment_id;
             $page_data['page_name'] = 'user_payment_invoice';
             $page_data['page_title'] = get_phrase('user_payment_invoice');
             $this->load->view('backend/index', $page_data);
@@ -1310,7 +1310,18 @@ class Admin extends CI_Controller {
 
         if ($param1 == "invoice") {
 
-            $this->pdf->loadHtml("<h1>test</h1>");
+            $payment_id = $this->input->post('payment_id');
+            $payment = [];
+            $payment = $this->crud_model->get_payment_details($payment_id);
+            if ($payment->num_rows() > 0) {
+                $payment = $payment->row_array();
+            }
+            $page_data['payment'] = $payment;
+            $page_data['page_name'] = 'user_payment_invoice_layout';
+            $page_data['page_title'] = get_phrase('user_payment_invoice_layout');
+            $this->load->view('backend/index', $page_data);
+            $html = $this->output->get_output();
+            $this->pdf->loadHtml($html);
             $this->pdf->render();
             $this->pdf->stream("test.pdf", array("Attachment"=>0));
         }

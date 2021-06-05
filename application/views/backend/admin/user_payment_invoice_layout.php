@@ -164,6 +164,7 @@
 		</address>
 		<span><img alt="" src="http://www.jonathantneal.com/examples/invoice/logo.png"><input type="file" accept="image/*"></span>
 	</header>
+	<?=var_dump($payment); //payment details data array?>
 	<article>
 		<h1>Recipient</h1>
 		<address contenteditable>

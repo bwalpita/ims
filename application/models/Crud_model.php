@@ -1735,7 +1735,12 @@ class Crud_model extends CI_Model
         }
         $data['date_added'] = strtotime(date('D, d-M-Y'));
         $this->db->insert('payment', $data);
-        
+        return $this->db->insert_id();
+    }
+
+    public function get_payment_details($payment_id)
+    {
+        return $this->db->get_where('payment', array('id' => $payment_id));
     }
 
     public function get_default_lesson($section_id)
