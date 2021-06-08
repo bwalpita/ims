@@ -1327,6 +1327,20 @@ class Admin extends CI_Controller {
         }
     }
 
+    //attendance
+    public function users_attendance($param1 = "", $param2 = "")
+    {
+        if ($this->session->userdata('admin_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        $page_data['page_name'] = 'users_attendance';
+        $page_data['page_title'] = get_phrase('users_attendance');
+        $page_data['attendances'] = $this->crud_model->get_all_attendance()->result_array();
+
+        $this->load->view('backend/index', $page_data);
+    }
+
 
     // AJAX PORTION
     // this function is responsible for managing multiple choice question

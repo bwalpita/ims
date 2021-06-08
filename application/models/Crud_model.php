@@ -2702,4 +2702,15 @@ class Crud_model extends CI_Model
         $this->db->where('user_id', $user_id);
         return $this->db->get('course');
     }
+
+    function get_all_attendance()
+    {
+        $this->db->select('users.id, users.first_name , users.last_name , Attendance.date_entered , Attendance.time , Attendance.status , role.name , course.short_description , course.description');
+        $this->db->from('Attendance');
+        $this->db->join('users', 'Attendance.userId = users.id');
+        $this->db->join('role', 'users.role_id = role.id');
+        $this->db->join('course', 'users.course_id = course.id');
+        $this->db->where('Attendance.date_entered', '2021-06-6');
+        return $this->db->get();
+    }
 }

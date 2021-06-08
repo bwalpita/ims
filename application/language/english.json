@@ -1038,5 +1038,7 @@
     "generate_invoice": "Generate invoice",
     "generate": "Generate",
     "student_payments": "Student payments",
-    "user_payment_invoice_layout": "User payment invoice layout"
+    "user_payment_invoice_layout": "User payment invoice layout",
+    "student_attendance": "Student attendance",
+    "users_attendance": "Users attendance"
 }
