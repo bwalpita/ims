@@ -2705,12 +2705,45 @@ class Crud_model extends CI_Model
 
     function get_all_attendance()
     {
-        $this->db->select('users.id, users.first_name , users.last_name , Attendance.date_entered , Attendance.time , Attendance.status , role.name , course.short_description , course.description');
+        $this->db->select('Attendance.id, users.first_name , users.last_name , Attendance.date_entered , Attendance.time , Attendance.status , role.name , course.short_description , course.description');
         $this->db->from('Attendance');
         $this->db->join('users', 'Attendance.userId = users.id');
         $this->db->join('role', 'users.role_id = role.id');
         $this->db->join('course', 'users.course_id = course.id');
-        $this->db->where('Attendance.date_entered', '2021-06-6');
+        // $this->db->where('Attendance.date_entered', '2021-06-6');
         return $this->db->get();
+    }
+
+    function get_attendance_by_id($id)
+    {
+        $this->db->select('Attendance.id, users.first_name , users.last_name , Attendance.date_entered , Attendance.time , Attendance.status , role.name , course.short_description , course.description');
+        $this->db->from('Attendance');
+        $this->db->join('users', 'Attendance.userId = users.id');
+        $this->db->join('role', 'users.role_id = role.id');
+        $this->db->join('course', 'users.course_id = course.id');
+        $this->db->where('Attendance.id', $id);
+        return $this->db->get();
+    }
+
+    function add_attendence()
+    {
+        $data['userId']   = html_escape($this->input->post('userId'));
+        $data['date_entered']   = html_escape($this->input->post('date_entered'));
+        $data['time'] = html_escape($this->input->post('time'));
+        $data['status']   = html_escape($this->input->post('status'));
+
+        $this->db->insert('Attendance', $data);
+        return true;
+    }
+
+    function edit_attendence()
+    {
+        
+    }
+
+    function delete_attendence($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('Attendance');
     }
 }
