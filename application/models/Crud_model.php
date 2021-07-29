@@ -2697,4 +2697,11 @@ class Crud_model extends CI_Model
         $this->db->where('user_id', $user_id);
         return $this->db->get('course');
     }
+
+    public function get_last_inserted_record()
+    {
+        $query = $this->db->query('SELECT * FROM payment ORDER BY id DESC LIMIT 1');
+        $row = $query->row();
+        return $row;
+    }
 }

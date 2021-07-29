@@ -1302,17 +1302,31 @@ class Admin extends CI_Controller {
             $course_id = $this->input->post('course_id');
             $course_payment = $this->input->post('course_payment');
             $this->crud_model->course_manual_payment($user_id, "manual", $course_id, $course_payment);
+            $data = $this->crud_model->get_last_inserted_record();
 
             $page_data['page_name'] = 'user_payment_invoice';
             $page_data['page_title'] = get_phrase('user_payment_invoice');
+            $page_data['payment'] = $data; 
             $this->load->view('backend/index', $page_data);
         }
 
         if ($param1 == "invoice") {
+            $payment = $this->crud_model->get_payment_details_by_id($param2);
+            $user = $this->user_model->get_user($payment['user_id'])->row_array();
+            $course = $this->crud_model->get_course_by_id($payment['course_id'])->row_array();
+            // print_r($course); die();
+            $page_data['payment'] = $payment;
+            $page_data['user'] = $user;
+            $page_data['courses'] = $course;
+            $page_data['page_name'] = 'user_payment_invoice_layout';
+            $page_data['page_title'] = get_phrase('user_payment_invoice_layout');
 
-            $this->pdf->loadHtml("<h1>test</h1>");
+            $this->load->view('backend/index', $page_data);
+            $html = $this->output->get_output();
+
+            $this->pdf->loadHtml($this->payment_model->invoice());
             $this->pdf->render();
-            $this->pdf->stream("test.pdf", array("Attachment"=>0));
+            $this->pdf->stream("invoice.pdf", array("Attachment"=>0));
         }
     }
 
@@ -1351,4 +1365,5 @@ class Admin extends CI_Controller {
         $question_json = $this->input->post('itemJSON');
         $this->crud_model->sort_question($question_json);
     }
+    
 }
