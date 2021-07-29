@@ -119,6 +119,10 @@ $status_wise_courses = $this->crud_model->get_status_wise_courses();
 				<li class = "<?php if($page_name == 'users_payment') echo 'active'; ?>">
 					<a href="<?php echo site_url('admin/users_payment'); ?>"><?php echo get_phrase('student_payments'); ?></a>
 				</li>
+
+				<li class = "<?php if($page_name == 'users_attendance') echo 'active'; ?>">
+					<a href="<?php echo site_url('admin/users_attendance'); ?>"><?php echo get_phrase('student_attendance'); ?></a>
+				</li>
 			</ul>
 		</li>
 

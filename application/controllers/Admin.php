@@ -1301,9 +1301,9 @@ class Admin extends CI_Controller {
             $user_id = $this->input->post('user_id');
             $course_id = $this->input->post('course_id');
             $course_payment = $this->input->post('course_payment');
+
             $this->crud_model->course_manual_payment($user_id, "manual", $course_id, $course_payment);
             $data = $this->crud_model->get_last_inserted_record();
-
             $page_data['page_name'] = 'user_payment_invoice';
             $page_data['page_title'] = get_phrase('user_payment_invoice');
             $page_data['payment'] = $data; 
@@ -1320,7 +1320,6 @@ class Admin extends CI_Controller {
             $page_data['courses'] = $course;
             $page_data['page_name'] = 'user_payment_invoice_layout';
             $page_data['page_title'] = get_phrase('user_payment_invoice_layout');
-
             $this->load->view('backend/index', $page_data);
             $html = $this->output->get_output();
 
@@ -1330,6 +1329,75 @@ class Admin extends CI_Controller {
         }
     }
 
+    //attendance
+    public function users_attendance($param1 = "", $param2 = "")
+    {
+        if ($this->session->userdata('admin_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        $page_data['page_name'] = 'users_attendance';
+        $page_data['page_title'] = get_phrase('users_attendance');
+        $page_data['attendances'] = $this->crud_model->get_all_attendance()->result_array();
+
+        $this->load->view('backend/index', $page_data);
+    }
+
+    public function users_attendance_form($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        if ($param1 == 'add') {
+            $page_data['page_name'] = 'users_attendance_add';
+            $page_data['page_title'] = get_phrase('attendance_add');
+            $page_data['students'] = $this->user_model->get_all_user()->result_array();
+            $this->load->view('backend/index', $page_data);
+        }
+        elseif ($param1 == 'edit') {
+            $page_data['page_name'] = 'users_attendance_edit';
+            $page_data['page_title'] = get_phrase('attendance_edit');
+            $page_data['students'] = $this->user_model->get_all_user()->result_array();
+            $page_data['attendance'] = $this->crud_model->get_attendance_by_id($param2)->row_array();
+            $this->load->view('backend/index', $page_data);
+        }
+    }
+
+    public function attendance($param1 = "", $param2 = "") {
+        if ($this->session->userdata('admin_login') != true) {
+            redirect(site_url('login'), 'refresh');
+        }
+
+        if ($param1 == 'add') {
+            $response = $this->crud_model->add_attendence();
+            if ($response) {
+                $this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+            }else{
+                $this->session->set_flashdata('error_message', get_phrase('can_not_insert'));
+            }
+            redirect(site_url('admin/users_attendance'), 'refresh');
+        }
+        elseif ($param1 == "edit") {
+            $response = $this->crud_model->edit_attendence($param2);
+            if ($response) {
+                $this->session->set_flashdata('flash_message', get_phrase('data_added_successfully'));
+            }else{
+                $this->session->set_flashdata('error_message', get_phrase('can_not_insert'));
+            }
+            redirect(site_url('admin/users_attendance'), 'refresh');
+        }
+        elseif ($param1 == "delete") {
+            $this->crud_model->delete_attendence($param2);
+            $this->session->set_flashdata('flash_message', get_phrase('data_deleted'));
+            redirect(site_url('admin/users_attendance'), 'refresh');
+        }
+
+        $page_data['page_name'] = 'users_attendance';
+        $page_data['page_title'] = get_phrase('users_attendance');
+        $page_data['attendances'] = $this->crud_model->get_all_attendance()->result_array();
+
+        $this->load->view('backend/index', $page_data);
+    }
 
     // AJAX PORTION
     // this function is responsible for managing multiple choice question

@@ -17,6 +17,7 @@
                 <h4 class="header-title mb-3"><?php echo get_phrase('generate_invoice'); ?></h4>
 
                 <form class="required-form" action="<?php echo site_url('admin/payments/invoice/' . $payment->id); ?>" enctype="multipart/form-data" method="post">
+
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group row mb-3">

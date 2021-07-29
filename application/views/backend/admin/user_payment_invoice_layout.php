@@ -163,6 +163,7 @@
 			<p>(800) 555-1234</p>
 		</address>
 	</header>
+	<?=var_dump($payment); //payment details data array?>
 	<article>
 		<table class="meta">
 			<tr>
