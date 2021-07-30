@@ -1312,9 +1312,11 @@ class Admin extends CI_Controller {
 
         if ($param1 == "invoice") {
             $payment = $this->crud_model->get_payment_details_by_id($param2);
+            $paymentSum = $this->crud_model->get_payment_details_sum_id($payment['user_id']);
+
             $user = $this->user_model->get_user($payment['user_id'])->row_array();
             $course = $this->crud_model->get_course_by_id($payment['course_id'])->row_array();
-            // print_r($course); die();
+            
             $page_data['payment'] = $payment;
             $page_data['user'] = $user;
             $page_data['courses'] = $course;
@@ -1323,7 +1325,7 @@ class Admin extends CI_Controller {
             $this->load->view('backend/index', $page_data);
             $html = $this->output->get_output();
 
-            $this->pdf->loadHtml($this->payment_model->invoice());
+            $this->pdf->loadHtml($this->payment_model->invoice($payment, $user, $course, $paymentSum));
             $this->pdf->render();
             $this->pdf->stream("invoice.pdf", array("Attachment"=>0));
         }

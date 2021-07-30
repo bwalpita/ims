@@ -248,6 +248,13 @@ class Crud_model extends CI_Model
         return $this->db->get_where('payment', array('id' => $payment_id))->row_array();
     }
 
+    public function get_payment_details_sum_id($student_id = "")
+    {
+        $query = $this->db->query('SELECT SUM(amount) AS payment FROM payment WHERE user_id ='. $student_id);
+        $row = $query->row();
+        return $row;
+    }
+
     public function update_payout_status($payout_id = "", $payment_type = "")
     {
         $updater = array(
